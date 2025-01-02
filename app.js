@@ -2,8 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const dotenv = require("dotenv")
+const bodyParser = require('body-parser');
 const connectDb = require("./config/dbConnection");
 dotenv.config();
+const userRoutes = require('./routes/userRoutes');
+const availabilityRoutes = require('./routes/availabilityRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
 // const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
 
@@ -12,6 +16,9 @@ app.use(express.json());
 
 // MongoDB DocumentDB Connection
 connectDb();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
   
     // mongoose.connect('mongodb://shankarjatin:Hanumanji10@devops-jatin-908027412262.ap-southeast-2.docdb-elastic.amazonaws.com:27017', {
     //     useNewUrlParser: true,
@@ -41,13 +48,11 @@ connectDb();
 // const appointmentController = require('./controllers/appointmentController');
 
 // // Routes
-// const userRoutes = require('./routes/userRoutes');
-// const availabilityRoutes = require('./routes/availabilityRoutes');
-// const appointmentRoutes = require('./routes/appointmentRoutes');
 
-// app.use('/users', userRoutes);
-// app.use('/availability', availabilityRoutes);
-// app.use('/appointments', appointmentRoutes);
+
+app.use('/users', userRoutes);
+app.use('/availability', availabilityRoutes);
+app.use('/appointments', appointmentRoutes);
 
 // Deploy on EC2
 app.listen(3000, () => console.log('Server running on port 3000'));
