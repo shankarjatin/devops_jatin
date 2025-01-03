@@ -30,7 +30,7 @@ const options = {
 
 mongoose.connect(uri, options)
     .then(() => console.log('Connected to Amazon DocumentDB!'))
-    .catch(err => console.error('Error connecting to Amazon DocumentDB:', err.message));
+    .catch(err => console.error('Error connecting to Amazon DocumentDB:', err));
 
 // Routes
 app.use('/users', userRoutes);
