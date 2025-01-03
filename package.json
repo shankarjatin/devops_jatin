@@ -6,6 +6,8 @@
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.9.3"
+    "mongodb": "^6.12.0",
+    "mongoose": "^8.9.3",
+    "mongoose-aws-documentdb-tunneling": "^1.0.0-alpha.30"
   }
 }

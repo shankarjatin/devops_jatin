@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const MONGOOSE = require('mongoose-aws-documentdb-tunneling')
 const fs = require('fs');
 const dotenv = require("dotenv")
 const bodyParser = require('body-parser');
@@ -16,7 +17,41 @@ const app = express();
 app.use(express.json());
 
 // MongoDB DocumentDB Connection
-connectDb();
+// const fs = require('fs');
+// const mongoose = require('mongoose');
+
+// const cert = fs.readFileSync('./global-bundle.pem');
+// MONGOOSE.connect('mongodb://shankarjatin:Hanumanji10@devops-jatin-908027412262.ap-southeast-2.docdb-elastic.amazonaws.com:27017', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     ssl: true, // Enable SSL
+//     replicaSet: 'rs0', // Specify the replica set
+//     serverSelectionTimeoutMS: 50000, // Increase server selection timeout
+//   }).then(() => {
+//     console.log('Connected to DocumentDB!');
+//   }).catch((err) => {
+//     console.error('Error connecting to DocumentDB:', err.message);
+//   });
+  
+
+const ca = [fs.readFileSync('./global-bundle.pem')];
+  const uri = 'mongodb://adminuser:Hanumanji@10@docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=global-bundle.pem&retryWrites=false';
+
+  const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    tls: true,
+    tlsCAFile: ca, 
+   
+
+  };
+  
+  mongoose.connect(uri, options)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Error connecting to MongoDB:', err));
+
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
