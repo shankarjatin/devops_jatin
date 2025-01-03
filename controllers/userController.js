@@ -31,31 +31,44 @@ exports.register = async (req, res) => {
 
 // User Login
 exports.login = async (req, res) => {
-    try {
-        const { username, password } = req.body;
+  try {
+      const { username, password } = req.body;
 
-        const user = await db.collection('users').findOne({ username });
-        if (!user) {
-            return res.status(400).send('User not found');
-        }
+      if (!username || !password) {
+          return res.status(400).send('All fields are required');
+      }
 
-        const validPass = await bcrypt.compare(password, user.password);
-        if (!validPass) {
-            return res.status(400).send('Invalid password');
-        }
+      const db = getDb(); // Get the database instance
+      if (!db) {
+          return res.status(500).send('Database connection not initialized');
+      }
 
-        const token = jwt.sign(
-            { _id: user._id, role: user.role },
-            'SECRET_KEY', // Replace with your secret key
-            { expiresIn: '1h' }
-        );
+      // Find the user
+      const user = await db.collection('users').findOne({ username });
+      if (!user) {
+          return res.status(400).send('User not found');
+      }
 
-        res.send({ token });
-    } catch (error) {
-        console.error('Error logging in user:', error);
-        res.status(500).send('Error logging in user');
-    }
+      // Check if the password is valid
+      const validPass = await bcrypt.compare(password, user.password);
+      if (!validPass) {
+          return res.status(400).send('Invalid password');
+      }
+
+      // Generate JWT token
+      const token = jwt.sign(
+          { _id: user._id, role: user.role },
+          'SECRET_KEY', // Replace with your secret key
+          { expiresIn: '1h' }
+      );
+
+      res.send({ token });
+  } catch (error) {
+      console.error('Error logging in user:', error);
+      res.status(500).send('Error logging in user');
+  }
 };
+
 
 // Connect to the database when the app starts
 // connectToDatabase();
