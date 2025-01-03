@@ -40,10 +40,11 @@ const ca = [fs.readFileSync('./global-bundle.pem')];
   const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    tls: true,
-    tlsCAFile: ca, 
-   
-
+    autoIndex: true, // Create indexes automatically
+    retryWrites: true, // Retry write operations
+    w: 'majority', // Ensure write operations are acknowledged by a majority of replica set members
+    maxPoolSize: 10, // Maximum number of connections in the pool
+    serverSelectionTimeoutMS: 5000, // Increase timeout if needed
   };
   
   mongoose.connect(uri, options)
