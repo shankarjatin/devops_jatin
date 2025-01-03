@@ -54,7 +54,7 @@ let db;
 
 const connectToDatabase = async () => {
     try {
-        const client = await MongoClient.connect(readConnectionFromUser(), {
+        const client = await MongoClient.connect("mongodb://adminuser:Hanumanji10@docdb-2025-01-02-17-12-50.cluster-c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false", {
             tlsCAFile: './global-bundle.pem',
             replicaSet: 'rs0',
             readPreference: 'primary',
