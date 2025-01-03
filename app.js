@@ -21,12 +21,14 @@ const uri = 'mongodb://adminuser:Hanumanji10@docdb-2025-01-02-17-12-50.c7ooww4i4
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    ssl: true, // Enable SSL
+    ssl: true,
     tlsCAFile: './global-bundle.pem', // Path to the TLS certificate
-    replicaSet: 'rs0', // Specify the replica set
-    readPreference: 'secondaryPreferred', // Secondary preferred read preference
+    replicaSet: 'rs0', // Replica set name
+    readPreference: 'secondaryPreferred', // Set read preference
     serverSelectionTimeoutMS: 5000, // Timeout for server selection
 };
+
+
 
 mongoose.connect(uri, options)
     .then(() => console.log('Connected to Amazon DocumentDB!'))
