@@ -65,22 +65,20 @@ const readConnectionFromUser = () => {
 };
 
 // MongoDB Client Connection
-let db; // To hold the database connection
-MongoClient.connect(
-    readConnectionFromUser(),
-    {
-        tlsCAFile: './global-bundle.pem', // Path to the TLS certificate
-    },
-    function (err, client) {
-        if (err) {
-            console.error('Error connecting to Amazon DocumentDB:', err);
-            process.exit(1); // Exit if connection fails
-        }
-
+let db;
+const connectToDatabase = async () => {
+    try {
+        const client = await MongoClient.connect(readConnectionFromUser(), {
+            tlsCAFile: './global-bundle.pem',
+        });
         console.log('Connected to Amazon DocumentDB!');
-        db = client.db('sample-database'); // Specify the database to be used
+        db = client.db('sample-database');
+    } catch (err) {
+        console.error('Error connecting to Amazon DocumentDB:', err);
+        process.exit(1);
     }
-);
+};
+connectToDatabase();
 
 // MongoDB DocumentDB Connection
 // const uri = 'mongodb://adminuser:Hanumanji10@docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/sample-database?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false';
