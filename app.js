@@ -7,6 +7,7 @@ const userRoutes = require('./routes/userRoutes');
 const availabilityRoutes = require('./routes/availabilityRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const User = require('./models/User');
+const port = process.env.PORT || 3000;
 
 const MongoClient = require('mongodb').MongoClient;
 
@@ -46,6 +47,7 @@ const defaultConnection = () => {
 
 // Allow minor overrides from user
 const readConnectionFromUser = () => {
+    
     console.log("\nUsing default connection details.");
     const override = question(
         "Do you want to override any details (yes/no)? "
@@ -115,4 +117,4 @@ app.get('/users/professors', async (req, res) => {
 });
 
 // Start the Server
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(port, () => console.log('Server running on port 8000'));
