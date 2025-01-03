@@ -79,7 +79,7 @@ const connectToDatabase = async () => {
       readPreference: 'primary',
       socketTimeoutMS: 30000,
       connectTimeoutMS: 30000,
-    });
+    }).catch((err) => {console.error(err); process.exit(1);});
 
     console.log('Connected to Amazon DocumentDB!');
     db = client.db('sample-database'); // Assign the database instance to `db`
