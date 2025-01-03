@@ -7,7 +7,7 @@ const userRoutes = require('./routes/userRoutes');
 const availabilityRoutes = require('./routes/availabilityRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const User = require('./models/User');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 const MongoClient = require('mongodb').MongoClient;
 
