@@ -88,8 +88,9 @@ const connectToDatabase = async () => {
       .connect(readConnectionFromUser(), {
         tlsCAFile: "./global-bundle.pem",
       })
-      .then(() => console.log("connected"));
-    // .catch(e=>console.log(e));;;
+      .then(() => console.log("connected")).
+        catch(e=>console.log(e));
+      
   } catch (err) {
     console.error("Error connecting to Amazon DocumentDB:", err);
     process.exit(1);
