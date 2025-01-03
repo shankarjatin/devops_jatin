@@ -115,6 +115,13 @@ app.get('/users/professors', async (req, res) => {
         res.status(500).send('Error fetching professors');
     }
 });
+app.get('/', async (req, res) => {
+    try {
+       res.send.json("Welcome to the Appointment Booking System");
+    } catch (err) {
+        res.status(500).send('Error fetching professors');
+    }
+});
 
 // Start the Server
 app.listen(port, () => console.log('Server running on port 8000'));
