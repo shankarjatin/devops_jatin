@@ -70,27 +70,23 @@ const readConnectionFromUser = () => {
 
 // MongoDB Client Connection
 let db;
+
 const connectToDatabase = async () => {
   try {
     const client = await MongoClient.connect(readConnectionFromUser(), {
-        tlsCAFile: './global-bundle.pem',
-        replicaSet: 'rs0',
-        readPreference: 'primary',
-        socketTimeoutMS: 30000,
-        connectTimeoutMS: 30000,
-    }).then(()=>console.log('connected'))
-    .catch(e=>console.log(e));;
-    console.log('Connected to Amazon DocumentDB!');
-    db = client.db('sample-database');
-    // mongoose.set("strictQuery", false);
+      tlsCAFile: './global-bundle.pem',
+      replicaSet: 'rs0',
+      readPreference: 'primary',
+      socketTimeoutMS: 30000,
+      connectTimeoutMS: 30000,
+    });
 
-    // await mongoose
-    //   .connect(readConnectionFromUser(), {
-    //     tlsCAFile: "./global-bundle.pem",
-    //   })
-    //   .then(() => console.log("connected")).
-    //     catch(e=>console.log(e));
-      
+    console.log('Connected to Amazon DocumentDB!');
+    db = client.db('sample-database'); // Assign the database instance to `db`
+    
+    // You can optionally verify the database connection by listing collections
+    const collections = await db.listCollections().toArray();
+    console.log('Collections:', collections);
   } catch (err) {
     console.error("Error connecting to Amazon DocumentDB:", err);
     process.exit(1);
