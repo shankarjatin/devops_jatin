@@ -70,4 +70,11 @@ const connectToDatabase = async () => {
     }
 };
 
-module.exports = { connectToDatabase, getDb: () => db };
+const getDb = () => {
+    if (!db) {
+        throw new Error('Database connection not initialized');
+    }
+    return db;
+};
+
+module.exports = { connectToDatabase, getDb };

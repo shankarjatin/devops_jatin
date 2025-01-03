@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../connect').getDb();
+const { getDb } = require('../connect')
 // User Registration
 exports.register = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
       if (!username || !password || !role) {
           return res.status(400).send('All fields are required');
       }
-
+      const db = getDb();
       const existingUser = await db.collection('users').findOne({ username });
       if (existingUser) {
           return res.status(400).send('User already exists');
