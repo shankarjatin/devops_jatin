@@ -35,16 +35,14 @@ app.use(express.json());
   
 
 const ca = [fs.readFileSync('./global-bundle.pem')];
-  const uri = 'mongodb://adminuser:Hanumanji10@docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=global-bundle.pem&retryWrites=false';
+  const uri = 'mongodb://adminuser:Hanumanji@10@docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=global-bundle.pem&retryWrites=false';
 
   const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    autoIndex: true, // Create indexes automatically
-    retryWrites: true, // Retry write operations
-    w: 'majority', // Ensure write operations are acknowledged by a majority of replica set members
-    maxPoolSize: 10, // Maximum number of connections in the pool
-    serverSelectionTimeoutMS: 5000, // Increase timeout if needed
+    tls: true,
+    tlsCAFile: ca, 
+    replicaSet: 'rs0',
   };
   
   mongoose.connect(uri, options)
