@@ -79,7 +79,7 @@ const connectToDatabase = async () => {
         }).then(()=>console.log('connected'))
         .catch(e=>console.log(e));;
         console.log('Connected to Amazon DocumentDB!');
-        db = client.db('sample-database');
+
     } catch (err) {
         console.error('Error connecting to Amazon DocumentDB:', err);
         process.exit(1);
