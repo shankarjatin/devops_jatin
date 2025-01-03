@@ -72,7 +72,7 @@ const readConnectionFromUser = () => {
 let db;
 const connectToDatabase = async () => {
   try {
-    const client = await mongoose.connect(readConnectionFromUser(), {
+    const client = await MongoClient.connect(readConnectionFromUser(), {
         tlsCAFile: './global-bundle.pem',
         replicaSet: 'rs0',
         readPreference: 'primary',
@@ -81,7 +81,7 @@ const connectToDatabase = async () => {
     }).then(()=>console.log('connected'))
     .catch(e=>console.log(e));;
     console.log('Connected to Amazon DocumentDB!');
-    // db = client.db('sample-database');
+    db = client.db('sample-database');
     // mongoose.set("strictQuery", false);
 
     // await mongoose
