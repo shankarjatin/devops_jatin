@@ -1,4 +1,4 @@
-const { getDb } = require('../dbConnection');
+const { getDb } = require('../connect');
 
 // Book Appointment
 exports.bookAppointment = async (req, res) => {
