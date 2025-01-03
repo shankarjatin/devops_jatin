@@ -8,6 +8,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.0.1",
     "mongoose": "^8.9.3",
-    "mongoose-aws-documentdb-tunneling": "^1.0.0-alpha.30"
+    "mongoose-aws-documentdb-tunneling": "^1.0.0-alpha.30",
+    "readline-sync": "^1.4.10"
   }
 }
