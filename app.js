@@ -1,12 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const fs = require('fs');
-const dotenv = require("dotenv");
+const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/userRoutes');
-const availabilityRoutes = require('./routes/availabilityRoutes');
-const appointmentRoutes = require('./routes/appointmentRoutes');
-const User = require('./models/User');
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -15,36 +10,55 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// MongoDB DocumentDB Connection
+// MongoDB DocumentDB Connection URI
 const uri = 'mongodb://adminuser:Hanumanji10@docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/sample-database?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false';
 
-const options = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true,
-    tlsCAFile: './global-bundle.pem', // Path to the TLS certificate
-    replicaSet: 'rs0', // Replica set name
-    readPreference: 'secondaryPreferred', // Set read preference
-    serverSelectionTimeoutMS: 5000, // Timeout for server selection
-};
+// MongoDB Client Connection
+let db; // To hold the database connection
+MongoClient.connect(
+    uri,
+    {
+        tlsCAFile: './global-bundle.pem', // Path to the TLS certificate
+    },
+    function (err, client) {
+        if (err) {
+            console.error('Error connecting to Amazon DocumentDB:', err);
+            return;
+        }
 
-
-
-mongoose.connect(uri, options)
-    .then(() => console.log('Connected to Amazon DocumentDB!'))
-    .catch(err => console.error('Error connecting to Amazon DocumentDB:', err));
+        console.log('Connected to Amazon DocumentDB!');
+        db = client.db('sample-database'); // Specify the database to be used
+    }
+);
 
 // Routes
-app.use('/users', userRoutes);
-app.use('/availability', availabilityRoutes);
-app.use('/appointments', appointmentRoutes);
+app.get('/users', async (req, res) => {
+    try {
+        const users = await db.collection('users').find({}).toArray();
+        res.send(users);
+    } catch (err) {
+        console.error('Error fetching users:', err.message);
+        res.status(500).send('Error fetching users');
+    }
+});
 
-// Fetch Professors Endpoint
+app.post('/users', async (req, res) => {
+    try {
+        const newUser = req.body;
+        const result = await db.collection('users').insertOne(newUser);
+        res.status(201).send(result);
+    } catch (err) {
+        console.error('Error adding user:', err.message);
+        res.status(500).send('Error adding user');
+    }
+});
+
 app.get('/users/professors', async (req, res) => {
     try {
-        const professors = await User.find({ role: 'professor' }, '_id username');
+        const professors = await db.collection('users').find({ role: 'professor' }).toArray();
         res.send(professors);
     } catch (err) {
+        console.error('Error fetching professors:', err.message);
         res.status(500).send('Error fetching professors');
     }
 });
