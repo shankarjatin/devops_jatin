@@ -58,4 +58,4 @@ exports.login = async (req, res) => {
 };
 
 // Connect to the database when the app starts
-connectToDatabase();
+// connectToDatabase();
