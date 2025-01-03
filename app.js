@@ -117,7 +117,7 @@ app.get('/users/professors', async (req, res) => {
 });
 app.get('/', async (req, res) => {
     try {
-       res.send.json("Welcome to the Appointment Booking System");
+       res.send("Welcome to the Appointment Booking System");
     } catch (err) {
         res.status(500).send('Error fetching professors');
     }

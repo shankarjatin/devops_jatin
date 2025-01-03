@@ -13,18 +13,21 @@
 // };}
 // module.exports = connectDb;
 
-const fs = require('fs');
-const mongoose = require('mongoose');
+// const fs = require('fs');
+// const mongoose = require('mongoose');
 
-const cert = fs.readFileSync('./global-bundle.pem');
+// const cert = fs.readFileSync('./global-bundle.pem');
 
-mongoose.connect('mongodb://shankarjatin:Hanumanji10@devops-jatin-908027412262.ap-southeast-2.docdb-elastic.amazonaws.com:27017', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  ssl: true,
-  sslCA: cert,
-  replicaSet: 'rs0',
-  serverSelectionTimeoutMS: 50000, // Optional: Increase timeout
-})
-  .then(() => console.log('Connected to DocumentDB!'))
-  .catch((err) => console.error('Error connecting to DocumentDB:', err.message));
+// mongoose.connect('mongodb://shankarjatin:Hanumanji10@devops-jatin-908027412262.ap-southeast-2.docdb-elastic.amazonaws.com:27017', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   ssl: true,
+//   sslCA: cert,
+//   replicaSet: 'rs0',
+//   serverSelectionTimeoutMS: 50000, // Optional: Increase timeout
+// })
+//   .then(() => console.log('Connected to DocumentDB!'))
+//   .catch((err) => console.error('Error connecting to DocumentDB:', err.message));
+
+
+
