@@ -9,9 +9,7 @@ const appointmentRoutes = require("./routes/appointmentRoutes");
 const User = require("./models/User");
 const PORT = process.env.PORT || 8000;
 
-const MongoClient = require("mongodb").MongoClient;
 
-const readlineSync = require("readline-sync");
 const { connectToDatabase } = require("./connect");
 
 dotenv.config();
@@ -22,55 +20,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Function to securely read password
-const password = (query) => {
-  return readlineSync.question(query, { hideEchoBack: true });
-};
 
-// Function to prompt for generic input
-const question = (query) => {
-  return readlineSync.question(query, { hideEchoBack: false });
-};
-
-// Build Connection URI
-const buildConnection = (user, pass, server) => {
-  return `mongodb://${user}:${pass}@${server}:27017/sample-database?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false`;
-};
-
-// Default Connection URI
-const defaultConnection = () => {
-  const user = "adminuser";
-  const pass = "Hanumanji10";
-  const server =
-    "docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com";
-  return buildConnection(user, pass, server);
-};
-
-// Allow minor overrides from user
-const readConnectionFromUser = () => {
-  console.log("\nUsing default connection details.");
-  const override = question(
-    "Do you want to override any details (yes/no)? "
-  ).toLowerCase();
-
-  if (override === "yes") {
-    const user =
-      question("Enter username (default: adminuser): ") || "adminuser";
-    const pass =
-      password("Enter password (default: Hanumanji10): ") || "Hanumanji10";
-    const server =
-      question(
-        "Enter server (default: docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com): "
-      ) ||
-      "docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com";
-
-    return buildConnection(user, pass, server);
-  }
-
-  return defaultConnection();
-};
 
 // MongoDB Client Connection
-let db;
+// let db;
 
 // const connectToDatabase = async () => {
 //   try {

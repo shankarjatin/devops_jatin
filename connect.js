@@ -1,4 +1,8 @@
-const { MongoClient } = require('mongodb');
+
+const MongoClient = require("mongodb").MongoClient;
+const mongoose = require("mongoose");
+const fs = require("fs");
+const readlineSync = require("readline-sync");
 
 const password = (query) => {
     return readlineSync.question(query, { hideEchoBack: true });
