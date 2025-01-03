@@ -115,11 +115,26 @@ app.get('/users/professors', async (req, res) => {
         res.status(500).send('Error fetching professors');
     }
 });
-app.get('/', async (req, res) => {
+app.get('/test', async (req, res) => {
     try {
-       res.send("Welcome to the Appointment Booking System");
+        const dummyData = {
+            message: "Welcome to the Appointment Booking System",
+            features: [
+                "User registration and login",
+                "View available appointments",
+                "Book and manage appointments",
+                "Cancel bookings",
+                "Admin dashboard"
+            ],
+            version: "1.0.0",
+            developer: {
+                name: "Your Name",
+                email: "your.email@example.com"
+            }
+        };
+        res.json(dummyData);
     } catch (err) {
-        res.status(500).send('Error fetching professors');
+        res.status(500).json({ error: 'Error fetching data' });
     }
 });
 
