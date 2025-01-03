@@ -1,4 +1,5 @@
 const Availability = require('../models/Availability');
+const User = require('../models/User');
 
 exports.addAvailability = async (req, res) => {
   const { date, slots } = req.body;
@@ -16,3 +17,14 @@ exports.getAvailability = async (req, res) => {
   const availability = await Availability.find({ professorId });
   res.send(availability);
 };
+
+exports.getProfessors = async (req, res) => {
+ 
+    try {
+      const professors = await User.find({ role: 'professor' });
+      res.send(professors);
+    } catch (err) {
+      res.status(500).send('Error fetching professors');
+    }
+ 
+}

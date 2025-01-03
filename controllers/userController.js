@@ -20,6 +20,6 @@ exports.login = async (req, res) => {
   const validPass = await bcrypt.compare(password, user.password);
   if (!validPass) return res.status(400).send('Invalid password');
 
-  const token = jwt.sign({ _id: user._id, role: user.role }, 'SECRET_KEY');
-  res.header('Authorization', token).send({ token });
+  const token = jwt.sign({ _id: user._id, role: user.role }, 'SECRET_KEY', { expiresIn: '1h' }); // Add expiry for better security
+  res.send({ token });
 };

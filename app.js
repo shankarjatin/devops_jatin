@@ -8,6 +8,7 @@ dotenv.config();
 const userRoutes = require('./routes/userRoutes');
 const availabilityRoutes = require('./routes/availabilityRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const User = require('./models/User');
 // const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
 
@@ -53,6 +54,15 @@ app.use(bodyParser.json());
 app.use('/users', userRoutes);
 app.use('/availability', availabilityRoutes);
 app.use('/appointments', appointmentRoutes);
+app.get('/users/professors', async (req, res) => {
+    try {
+      const professors = await User.find({ role: 'professor' }, '_id username');
+      res.send(professors);
+    } catch (err) {
+      res.status(500).send('Error fetching professors');
+    }
+  });
+  
 
 // Deploy on EC2
 app.listen(3000, () => console.log('Server running on port 3000'));
