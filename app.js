@@ -7,11 +7,12 @@ const userRoutes = require("./routes/userRoutes");
 const availabilityRoutes = require("./routes/availabilityRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const User = require("./models/User");
-const port = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 const MongoClient = require("mongodb").MongoClient;
 
 const readlineSync = require("readline-sync");
+const { connectToDatabase } = require("./connect");
 
 dotenv.config();
 
@@ -71,27 +72,28 @@ const readConnectionFromUser = () => {
 // MongoDB Client Connection
 let db;
 
-const connectToDatabase = async () => {
-  try {
-    const client = await MongoClient.connect(readConnectionFromUser(), {
-      tlsCAFile: './global-bundle.pem',
-      replicaSet: 'rs0',
-      readPreference: 'primary',
-      socketTimeoutMS: 30000,
-      connectTimeoutMS: 30000,
-    }).catch((err) => {console.error(err); process.exit(1);});
+// const connectToDatabase = async () => {
+//   try {
+//     const client = await MongoClient.connect(readConnectionFromUser(), {
+//       tlsCAFile: './global-bundle.pem',
+//       replicaSet: 'rs0',
+//       readPreference: 'primary',
+//       socketTimeoutMS: 30000,
+//       connectTimeoutMS: 30000,
+//     }).catch((err) => {console.error(err); process.exit(1);});
 
-    console.log('Connected to Amazon DocumentDB!');
-    db = client.db('sample-database'); // Assign the database instance to `db`
+//     console.log('Connected to Amazon DocumentDB!');
+//     db = client.db('sample-database'); // Assign the database instance to `db`
     
-    // You can optionally verify the database connection by listing collections
-    const collections = await db.listCollections().toArray();
-    console.log('Collections:', collections);
-  } catch (err) {
-    console.error("Error connecting to Amazon DocumentDB:", err);
-    process.exit(1);
-  }
-};
+//     // You can optionally verify the database connection by listing collections
+//     const collections = await db.listCollections().toArray();
+//     console.log('Collections:', collections);
+//   } catch (err) {
+//     console.error("Error connecting to Amazon DocumentDB:", err);
+//     process.exit(1);
+//   }
+// };
+
 
 // MongoDB DocumentDB Connection
 // const uri = 'mongodb://adminuser:Hanumanji10@docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/sample-database?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false';
@@ -110,7 +112,11 @@ const connectToDatabase = async () => {
 //     .then(() => console.log('Connected to Amazon DocumentDB!'))
 //     .catch(err => console.error('Error connecting to Amazon DocumentDB:', err));
 
-// Routes
+const startServer = async () => {
+    await connectToDatabase();
+
+    // Define routes
+   // Routes
 app.use("/users", userRoutes);
 app.use("/availability", availabilityRoutes);
 app.use("/appointments", appointmentRoutes);
@@ -147,14 +153,23 @@ app.get("/test", async (req, res) => {
   }
 });
 
+    // Start the server
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+};
+
+startServer();
+
+
 // Start the Server
-connectToDatabase()
-  .then(() => {
-    app.listen(port, () => console.log(`Server running on port ${port}`));
-  })
-  .catch((err) => {
-    console.error("Failed to start the server:", err);
-    process.exit(1);
-  });
+// connectToDatabase()
+//   .then(() => {
+//     app.listen(port, () => console.log(`Server running on port ${port}`));
+//   })
+//   .catch((err) => {
+//     console.error("Failed to start the server:", err);
+//     process.exit(1);
+//   });
 
 // app.listen(port, () => console.log('Server running on port 8000'));

@@ -1,57 +1,32 @@
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-let db;
-
-const connectToDatabase = async () => {
-    try {
-        const client = await MongoClient.connect("mongodb://adminuser:$Hanumanji10@$docdb-2025-01-02-17-12-50.c7ooww4i43ft.ap-southeast-2.docdb.amazonaws.com:27017/sample-database?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false", {
-            tlsCAFile: './global-bundle.pem',
-            replicaSet: 'rs0',
-            readPreference: 'primary',
-            socketTimeoutMS: 30000,
-            connectTimeoutMS: 30000,
-        });
-
-        console.log('Connected to Amazon DocumentDB!');
-        db = client.db('sample-database'); // Replace with your database name
-    } catch (error) {
-        console.error('Error connecting to the database:', error);
-        process.exit(1);
-    }
-};
-
+const db = require('../connect').getDb();
 // User Registration
 exports.register = async (req, res) => {
-    try {
-        const { username, password, role } = req.body;
+  try {
+      const { username, password, role } = req.body;
 
-        if (!username || !password || !role) {
-            return res.status(400).send('All fields are required');
-        }
+      if (!username || !password || !role) {
+          return res.status(400).send('All fields are required');
+      }
 
-        const existingUser = await db.collection('users').findOne({ username });
-        if (existingUser) {
-            return res.status(400).send('User already exists');
-        }
+      const existingUser = await db.collection('users').findOne({ username });
+      if (existingUser) {
+          return res.status(400).send('User already exists');
+      }
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = {
-            username,
-            password: hashedPassword,
-            role,
-        };
+      const newUser = { username, password: hashedPassword, role };
+      await db.collection('users').insertOne(newUser);
 
-        await db.collection('users').insertOne(newUser);
-
-        res.status(201).send('User registered successfully');
-    } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).send('Error registering user');
-    }
+      res.status(201).send('User registered successfully');
+  } catch (error) {
+      console.error('Error registering user:', error);
+      res.status(500).send('Error registering user');
+  }
 };
 
 // User Login
