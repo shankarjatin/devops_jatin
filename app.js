@@ -7,6 +7,9 @@ const userRoutes = require("./routes/userRoutes");
 const availabilityRoutes = require("./routes/availabilityRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const User = require("./models/User");
+const { getDb } = require('./connect');
+
+
 const PORT = process.env.PORT || 8000;
 
 
@@ -76,12 +79,20 @@ app.use("/appointments", appointmentRoutes);
 
 // Fetch Professors Endpoint
 app.get("/users/professors", async (req, res) => {
-  try {
-    const professors = await User.find({ role: "professor" }, "_id username");
-    res.send(professors);
-  } catch (err) {
-    res.status(500).send("Error fetching professors");
-  }
+    try {
+        const db = getDb(); // Get the database instance
+
+        // Fetch all users with the role "professor" and return only `_id` and `username`
+        const professors = await db.collection('users').find(
+            { role: "professor" },
+            { projection: { _id: 1, username: 1 } } // Only include `_id` and `username`
+        ).toArray();
+
+        res.status(200).send(professors);
+    } catch (err) {
+        console.error("Error fetching professors:", err);
+        res.status(500).send("Error fetching professors");
+    }
 });
 app.get("/test", async (req, res) => {
   try {
