@@ -72,6 +72,8 @@ const connectToDatabase = async () => {
     try {
         const client = await MongoClient.connect(readConnectionFromUser(), {
             tlsCAFile: './global-bundle.pem',
+            replicaSet: 'rs0', 
+            readPreference: 'primary',  
             socketTimeoutMS: 30000,
             connectTimeoutMS: 30000,
         });
